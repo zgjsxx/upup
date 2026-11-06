@@ -1,0 +1,33 @@
+/** 主进程 ←→ 渲染进程的通道名集中管理，避免拼写不一致 */
+export const IPC = {
+  getSnapshot: "upup:get-snapshot",
+  getSettings: "upup:get-settings",
+  updateSettings: "upup:update-settings",
+  startMove: "upup:start-move",
+  finishMove: "upup:finish-move",
+  cancelMove: "upup:cancel-move",
+  snooze: "upup:snooze",
+  skip: "upup:skip",
+  reset: "upup:reset",
+  pause: "upup:pause",
+  resume: "upup:resume",
+  clearStats: "upup:clear-stats",
+  dismissReminder: "upup:dismiss-reminder",
+  openMain: "upup:open-main",
+  closeReminder: "upup:close-reminder",
+  markTrayHintShown: "upup:mark-tray-hint",
+  appInfo: "upup:app-info",
+  debugAdvance: "upup:debug-advance",
+  windowMinimize: "upup:window-minimize",
+  windowHideMain: "upup:window-hide-main",
+  openDataDir: "upup:open-data-dir",
+
+  // 主进程 → 渲染进程
+  evSnapshot: "upup:ev-snapshot",
+  evNavigate: "upup:ev-navigate",
+  evMoveCompleted: "upup:ev-move-completed",
+  evTrayHint: "upup:ev-tray-hint",
+  evSettingsChanged: "upup:ev-settings-changed",
+  evReminderShown: "upup:ev-reminder-shown",
+  evPlayChime: "upup:ev-play-chime",
+} as const;

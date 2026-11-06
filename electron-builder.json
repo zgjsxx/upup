@@ -1,0 +1,79 @@
+{
+  "appId": "com.upup.qiqihui",
+  "productName": "起一会",
+  "copyright": "Copyright © 2026 起一会 UpUp",
+  "directories": {
+    "output": "release",
+    "buildResources": "build"
+  },
+  "files": [
+    "dist/**/*",
+    "dist-electron/**/*",
+    "resources/**/*",
+    "package.json"
+  ],
+  "asar": true,
+  "compression": "maximum",
+  "win": {
+    "target": [
+      { "target": "nsis", "arch": ["x64"] },
+      { "target": "portable", "arch": ["x64"] }
+    ],
+    "icon": "build/icon.png",
+    "artifactName": "起一会-UpUp-${version}-${arch}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "起一会",
+    "installerLanguages": ["zh_CN", "en_US"],
+    "language": "2052",
+    "deleteAppDataOnUninstall": false
+  },
+  "portable": {
+    "artifactName": "起一会-UpUp-${version}-便携版.${ext}"
+  },
+  "mac": {
+    "target": [
+      { "target": "dmg", "arch": ["x64", "arm64"] },
+      { "target": "zip", "arch": ["x64", "arm64"] }
+    ],
+    "category": "public.app-category.productivity",
+    "icon": "build/icon.png",
+    "darkModeSupport": true,
+    "hardenedRuntime": true,
+    "gatekeeperAssess": false,
+    "artifactName": "起一会-UpUp-${version}-${arch}.${ext}",
+    "extendInfo": {
+      "LSUIElement": 1,
+      "NSHumanReadableCopyright": "Copyright © 2026 起一会 UpUp",
+      "NSHighResolutionCapable": true
+    }
+  },
+  "dmg": {
+    "title": "起一会 ${version}",
+    "contents": [
+      { "x": 140, "y": 200, "type": "file" },
+      { "x": 400, "y": 200, "type": "link", "path": "/Applications" }
+    ]
+  },
+  "linux": {
+    "target": [
+      { "target": "AppImage", "arch": ["x64"] },
+      { "target": "deb", "arch": ["x64"] }
+    ],
+    "category": "Utility",
+    "icon": "build/icon.png",
+    "desktop": {
+      "StartupWMClass": "起一会",
+      "Name": "起一会",
+      "Comment": "轻量级久坐提醒工具",
+      "Keywords": "sit;reminder;health;break;久坐;提醒",
+      "X-GNOME-UsesNotifications": "true"
+    },
+    "artifactName": "起一会-UpUp-${version}-${arch}.${ext}"
+  }
+}

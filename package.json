@@ -1,0 +1,46 @@
+{
+  "name": "upup",
+  "productName": "起一会",
+  "version": "1.0.0",
+  "description": "起一会 UpUp — 轻量级久坐提醒工具",
+  "main": "dist-electron/main.js",
+  "author": "UpUp",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "npm run typecheck && node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "start": "npm run build && node scripts/dev-run.mjs",
+    "icons": "node scripts/make-icons.mjs",
+    "test": "tsx scripts/test-engine.mjs",
+    "verify": "node scripts/verify.mjs",
+    "verify:packaged": "node scripts/verify-packaged.mjs",
+    "clean": "node scripts/clean-output.mjs release",
+    "predist": "node scripts/fix-builder-cache.mjs && node scripts/clean-output.mjs release",
+    "dist": "npm run build && npm run predist && electron-builder",
+    "dist:win": "npm run build && npm run predist && electron-builder --win",
+    "dist:mac": "npm run build && npm run predist && electron-builder --mac",
+    "dist:linux": "npm run build && npm run predist && electron-builder --linux",
+    "dist:dir": "npm run build && npm run predist && electron-builder --dir"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "electron": "^33.3.1",
+    "electron-builder": "^25.1.8",
+    "esbuild": "^0.24.2",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.3"
+  }
+}
