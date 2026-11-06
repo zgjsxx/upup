@@ -37,6 +37,28 @@ const files = collect(root);
 let removed = 0;
 const stuck = [];
 
+/**
+ * 删除单个文件。
+ *
+ * 优先用 rmSync 而不是 unlinkSync：在某些桌面环境里，unlinkSync 会被拦截并
+ * 转交「移入回收站」流程，而回收站在处理大文件（如 27MB 的 app.asar）时可能
+ * 超时失败（genie-trash ETIMEDOUT）。rmSync 走的是直接删除路径，更可靠。
+ */
+function removeFile(f) {
+  for (const attempt of [
+    () => fs.rmSync(f, { force: true, maxRetries: 2, retryDelay: 100 }),
+    () => fs.unlinkSync(f),
+  ]) {
+    try {
+      attempt();
+      return true;
+    } catch {
+      /* 换下一种方式 */
+    }
+  }
+  return false;
+}
+
 for (const f of files) {
   // 大文件先截断，即使删不掉也已经释放磁盘空间
   try {
@@ -48,12 +70,8 @@ for (const f of files) {
   } catch {
     /* 忽略 */
   }
-  try {
-    fs.unlinkSync(f);
-    removed += 1;
-  } catch {
-    stuck.push(f);
-  }
+  if (removeFile(f)) removed += 1;
+  else stuck.push(f);
 }
 
 // 自底向上删空目录
@@ -80,15 +98,24 @@ function pruneEmpty(dir) {
 }
 
 if (stuck.length === 0) {
+  // 文件已全部删除，直接整目录移除（rmSync 比逐层 rmdirSync 更可靠）
   try {
-    fs.rmdirSync(root);
+    fs.rmSync(root, { recursive: true, force: true, maxRetries: 2, retryDelay: 100 });
     console.log(`✓ 已清空 ${target}/（${removed} 个文件）`);
   } catch {
     console.log(`✓ 已删除 ${target}/ 内 ${removed} 个文件（根目录保留）`);
   }
 } else {
+  // 仍有残留：尽量清掉空目录，留下最小结构
   pruneEmpty(root);
-  console.log(`⚠ ${target}/ 内 ${removed} 个文件已删除，${stuck.length} 个被占用（多为 0 字节残留）`);
+  for (const d of ["win-unpacked/resources", "win-unpacked"]) {
+    try {
+      fs.rmSync(path.join(root, d), { recursive: true, force: true });
+    } catch {
+      /* 目录非空则保留 */
+    }
+  }
+  console.log(`⚠ ${target}/ 内 ${removed} 个文件已删除，${stuck.length} 个未能删除`);
   for (const f of stuck.slice(0, 5)) console.log(`   ${path.relative(process.cwd(), f)}`);
   // 不阻断打包：electron-builder 会自行处理已清空的目录
   process.exit(0);
