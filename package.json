@@ -18,11 +18,12 @@
     "verify:packaged": "node scripts/verify-packaged.mjs",
     "clean": "node scripts/clean-output.mjs release",
     "predist": "node scripts/fix-builder-cache.mjs && node scripts/clean-output.mjs release",
-    "dist": "npm run build && npm run predist && electron-builder",
-    "dist:win": "npm run build && npm run predist && electron-builder --win",
+    "postdist": "node scripts/fix-exe-meta.mjs release",
+    "dist:win": "node scripts/dist-win.mjs",
+    "dist:win:dir": "node scripts/dist-win.mjs",
     "dist:mac": "npm run build && npm run predist && electron-builder --mac",
     "dist:linux": "npm run build && npm run predist && electron-builder --linux",
-    "dist:dir": "npm run build && npm run predist && electron-builder --dir"
+    "dist:dir": "npm run build && npm run predist && electron-builder --dir --config.win.signAndEditExecutable=false && npm run postdist"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

@@ -6,8 +6,11 @@ release-*/
 build-out/
 dist-rel*/
 dist-release*/
+_dist-*/
+_p*/
 _shots/
 *.log
+*.trash-*/
 .DS_Store
 Thumbs.db
 .vite/
